@@ -1,0 +1,138 @@
+body {
+    font-family: "Trebuchet MS", sans-serif;
+    width: 100%;
+    height: auto;
+    overflow-y: auto;
+    background-color: #e4e2e2;
+}
+#location-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+#coordinates {
+    width: 60%;
+}
+#add-location-button{
+    width: 50px;
+    height: 50px;
+}
+#map-modal {
+    display: none;
+    position: relative;
+    left: 0;
+    top: 0;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+#checklist-contents {
+    width: 90%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+.sub-box {
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 5%;
+    border: 1px solid #333;
+    margin: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+    width: 40%;
+    min-width: 375px;
+}
+#sub-box1 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+input {
+    margin: 3px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: calc(100% - 22px); 
+}
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+#pilot {
+    grid-column: span 2;
+}
+.project-wrapper {
+    grid-column: span 2;
+    position: relative;
+}
+#Date {
+    grid-column: span 1;
+}
+#weather-box {
+    grid-column: span 3;
+    display: flex;
+    justify-content: space-around;
+}
+i {
+    font-size: 24px;
+    cursor: pointer;
+}
+.active {
+    color: #4797ff;
+}
+.autocomplete-suggestions {
+    border: 1px solid #ddd;
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    background-color: white;
+    width: calc(100% - 2px);
+    z-index: 1000;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: none;
+}
+.autocomplete-suggestion {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+.autocomplete-suggestion:hover,
+.autocomplete-suggestion.selected {
+    background-color: #f0f0f0;
+}
+.highlight {
+    background-color: #e6ffd1;
+    font-weight: bold;
+}
+.checklist-item {
+    background-color: #faebeb;
+    border-radius: 10px;
+    border: 1px solid #333;
+    margin-bottom: 10px;
+    display: flex;
+    padding: 10px;
+}
+.item-checkbox {
+    width: 25px;
+    height: 25px;
+    margin: 15px;
+}
+.checkbox-content {
+    width: 70%;
+}
+.highlight {
+    background-color: #e3fad5;
+}
+.hidden {
+    display: none;
+}
+.list-button {
+    margin: 20px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
