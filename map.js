@@ -1,0 +1,113 @@
+require([
+    "esri/Map",
+    "esri/views/MapView",
+    "esri/Graphic",
+    "esri/layers/GraphicsLayer",
+    "esri/layers/FeatureLayer"
+], function(Map, MapView, Graphic, GraphicsLayer, FeatureLayer) {
+    const map = new Map({
+        basemap: "topo-vector"
+    });
+    const view = new MapView({
+        container: "map",
+        map: map,
+        center: [-122.805, 45.487],
+        zoom: 9
+    });
+    
+    const graphicsLayer = new GraphicsLayer();
+    map.add(graphicsLayer);
+    
+    const flightLayer = new FeatureLayer({
+        url: "https://services3.arcgis.com/pZZTDhBBLO3B9dnl/arcgis/rest/services/Drone_flights/FeatureServer/0",
+        outFields: ["*"]
+    });
+    
+    let selectedPoint = null;
+    let selectedWeather = [];
+    
+    view.on("click", function(event) {
+        const coordinateDescription = document.getElementById("coordinates-description");
+        graphicsLayer.removeAll();
+        
+        const currentLongitude = event.mapPoint.longitude;
+        const currentLatitude = event.mapPoint.latitude;
+        
+        const point = {
+            type: "point",
+            longitude: currentLongitude,
+            latitude: currentLatitude
+        };
+        
+        const pointGraphic = new Graphic({
+            geometry: point,
+            symbol: {
+                type: "simple-marker",
+                color: "red",
+                size: "8px"
+            }
+        });
+        
+        graphicsLayer.add(pointGraphic);
+        selectedPoint = point;
+        console.log(`Point added at longitude: ${currentLongitude}, latitude: ${currentLatitude}`);
+        coordinateDescription.innerText = `Coords: ${currentLatitude.toFixed(3)}, ${currentLongitude.toFixed(3)}`;
+    });
+
+    function saveFlight() {
+        if (!selectedPoint) {
+            console.error('No point selected on map');
+            return;
+        }
+
+        const checkedBoxes = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+            .map(checkbox => checkbox.id)
+            .join(',');
+        
+        const date = document.getElementById('Date').value;
+        const time = document.getElementById('time').value;
+        
+        if (!date || !time) {
+            console.error('Date and time are required');
+            return;
+        }
+
+        const dateTime = new Date(`${date}T${time}`).getTime();
+        
+        const geometry = {
+            type: "point",
+            longitude: selectedPoint.longitude,
+            latitude: selectedPoint.latitude,
+            spatialReference: { wkid: 4326 }
+        };
+        
+        const attributes = {
+            pilot: document.getElementById('pilot').value,
+            project: document.getElementById('project').value,
+            FlightTime: dateTime,
+            weather: window.selectedWeather.join(','),
+            checklistItems: checkedBoxes,
+            altitude: document.getElementById('altitude').value,
+            incident: document.getElementById('incident-description').value
+        };
+        
+        const graphic = new Graphic({
+            geometry: geometry,
+            attributes: attributes
+        });
+
+        flightLayer.applyEdits({
+            addFeatures: [graphic]
+        }).then(function(result) {
+            if (result.addFeatureResults.length > 0) {
+                console.log('Flight saved successfully:', attributes);
+            } else {
+                console.error("No features were added");
+            }
+        }).catch(function(error) {
+            console.error('Error saving flight: ', error);
+        });
+    }
+
+    document.getElementById('save-flight').addEventListener('click', saveFlight);
+});
