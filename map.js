@@ -2,9 +2,10 @@ require([
     "esri/Map",
     "esri/views/MapView",
     "esri/Graphic",
+    "esri/widgets/Locate",
     "esri/layers/GraphicsLayer",
     "esri/layers/FeatureLayer"
-], function(Map, MapView, Graphic, GraphicsLayer, FeatureLayer) {
+], function(Map, MapView, Graphic, Locate, GraphicsLayer, FeatureLayer) {
     const map = new Map({
         basemap: "topo-vector"
     });
@@ -13,6 +14,15 @@ require([
         map: map,
         center: [-122.805, 45.487],
         zoom: 9
+    });
+
+    var locateWidget = new Locate({
+        view: view,
+        useHeadingEnabled: false,
+        goToOverride: function(view, options) {
+        options.target.scale = 1500;
+        return view.goTo(options.target);
+        }
     });
    
     const graphicsLayer = new GraphicsLayer();
@@ -169,4 +179,6 @@ require([
         });
     }
     document.getElementById('save-flight').addEventListener('click', saveFlight);
+
+    view.ui.add(locateWidget, "top-left");
 });
