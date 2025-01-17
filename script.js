@@ -158,6 +158,91 @@ document.querySelectorAll('.item-checkbox').forEach((checkbox) => {
     });
 });
 
+function autoSave() {
+    const formData = {
+        inputs: {},
+        checkboxes: {},
+        selects: {},
+        weather: [],
+        coordinates: ''
+    };
+
+    document.querySelectorAll('input[type="text"], input[type="number"], input[type="date"], input[type="time"]').forEach(input => {
+        formData.inputs[input.id] = input.value;
+    });
+
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        formData.checkboxes[checkbox.id] = {
+            checked: checkbox.checked,
+            hidden: checkbox.closest('.checklist-item').classList.contains('hidden')
+        };
+    });
+
+    document.querySelectorAll('select').forEach(select => {
+        formData.selects[select.id] = select.value;
+    });
+
+    document.querySelectorAll('#weather-box i.active').forEach(icon => {
+        formData.weather.push(icon.getAttribute('data-weather'));
+    });
+
+    const coordsElement = document.getElementById('coordinates-description');
+    if (coordsElement) {
+        formData.coordinates = coordsElement.textContent;
+    }
+
+    localStorage.setItem('formData', JSON.stringify(formData));
+}
+
+function restoreData() {
+    const savedData = localStorage.getItem('formData');
+    if (savedData) {
+        const formData = JSON.parse(savedData);
+
+        Object.keys(formData.inputs).forEach(key => {
+            const input = document.getElementById(key);
+            if (input) {
+                input.value = formData.inputs[key];
+            }
+        });
+
+        Object.keys(formData.checkboxes).forEach(key => {
+            const checkbox = document.getElementById(key);
+            if (checkbox) {
+                checkbox.checked = formData.checkboxes[key].checked;
+                const checklistItem = checkbox.closest('.checklist-item');
+                if (checklistItem && formData.checkboxes[key].hidden) {
+                    checklistItem.classList.add('highlight', 'hidden');
+                }
+            }
+        });
+
+        Object.keys(formData.selects).forEach(key => {
+            const select = document.getElementById(key);
+            if (select) {
+                select.value = formData.selects[key];
+                if (key === 'incident-select') {
+                    const event = new Event('change');
+                    select.dispatchEvent(event);
+                }
+            }
+        });
+
+        document.querySelectorAll('#weather-box i').forEach(icon => {
+            const weather = icon.getAttribute('data-weather');
+            if (formData.weather.includes(weather)) {
+                icon.classList.add('active');
+                window.selectedWeather.push(weather);
+            }
+        });
+
+        const coordsElement = document.getElementById('coordinates-description');
+        if (coordsElement && formData.coordinates) {
+            coordsElement.textContent = formData.coordinates;
+        }
+    }
+}
+
 const showAllButton = document.getElementById('show-all-button');
 const clearAllButton = document.getElementById('clear-all-button');
 const clearBelowButton = document.getElementById('clear-some-button');
@@ -253,3 +338,7 @@ document.getElementById('add-location-button').addEventListener('click', functio
 document.getElementById('close-map-modal').addEventListener('click', function() {
     document.getElementById('map-modal').style.display = "none";
 });
+
+setInterval(autoSave, 500);
+
+window.addEventListener('load', restoreData);
