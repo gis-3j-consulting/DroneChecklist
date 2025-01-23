@@ -285,24 +285,27 @@ function clearBelow() {
     let currentElement = subBox1.nextElementSibling;
 
     while (currentElement) {
-        currentElement.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            checkbox.checked = false;
-            const checklistItem = checkbox.closest('.checklist-item');
-            if (checklistItem) {
-                checklistItem.classList.remove('highlight', 'hidden');
-                checklistItem.style.display = 'flex';
-            }
-        });
-        currentElement.querySelectorAll('input[type="text"]').forEach(input => {
-            input.value = '';
-        });
-        
-        currentElement.querySelectorAll('input[type="number"]').forEach(input => {
-            input.value = '';
-        });
-        currentElement.querySelectorAll('select').forEach(select => {
-            select.selectedIndex = 0;
-        });                
+        if (currentElement.id === 'sub-box3' || 
+            currentElement.id === 'sub-box4' || 
+            currentElement.id === 'sub-box5') {
+            currentElement.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+                const checklistItem = checkbox.closest('.checklist-item');
+                if (checklistItem) {
+                    checklistItem.classList.remove('highlight', 'hidden');
+                    checklistItem.style.display = 'flex';
+                }
+            });
+
+            currentElement.querySelectorAll('input[type="text"]').forEach(input => {
+                input.value = '';
+            });
+            
+            currentElement.querySelectorAll('input[type="number"]').forEach(input => {
+                input.value = '';
+            });
+        }
+
         currentElement = currentElement.nextElementSibling;
     }
 }
@@ -337,6 +340,22 @@ document.getElementById('add-location-button').addEventListener('click', functio
 
 document.getElementById('close-map-modal').addEventListener('click', function() {
     document.getElementById('map-modal').style.display = "none";
+});
+
+document.getElementById('190-ft-button').addEventListener('click', function() {
+    document.getElementById('altitude').value = 190;
+});
+
+document.getElementById('200-ft-button').addEventListener('click', function() {
+    document.getElementById('altitude').value = 200;
+});
+
+document.getElementById('220-ft-button').addEventListener('click', function() {
+    document.getElementById('altitude').value = 220;
+});
+
+document.getElementById('250-ft-button').addEventListener('click', function() {
+    document.getElementById('altitude').value = 250;
 });
 
 setInterval(autoSave, 500);

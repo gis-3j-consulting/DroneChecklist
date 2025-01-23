@@ -47,7 +47,7 @@
         <div id="list-controls">
             <button class="list-button" id="show-all-button">Show All Items</button>
             <button class="list-button" id="clear-all-button">Clear All Items</button>
-            <button class="list-button" id="clear-some-button">Clear All Items Below</button>
+            <button class="list-button" id="clear-some-button">Clear for Next Flight</button>
             <button class="list-button" id="save-flight">Save flight</button>
         </div>
         <div class="sub-box" id="sub-box2">
@@ -153,7 +153,7 @@
                 <div class="checklist-content"> 
                     <label class="checkbox-label" for="home-point">Determine Home point</label>
                     <ul>
-                        <li>Clear of interference (poewrlines, transmission towers, etc.)</li>
+                        <li>Clear of interference (powerlines, transmission towers, etc.)</li>
                     </ul>
                 </div>
             </div>
@@ -225,13 +225,19 @@
                 </div>
             </div>
         </div>
-        <div class="sub-box" id="sub-box4">
+        <div class="sub-box" id="sub-box5">
             <h2>Notes</h2>
             <div class="checklist-item">
                 <input type="checkbox" class="item-checkbox" id="flight-altitude" name="flight-altitude">
                 <div class="checklist-content"> 
                     <label class="checkbox-label" for="altitude">Flight altitude (ft):</label>
                     <input type="number" id="altitude" name="altitude" value="">
+                </div>
+                <div id="common-altitudes">
+                    <button id="190-ft-button">190 Ft</button>
+                    <button id="200-ft-button">200 Ft</button>
+                    <button id="220-ft-button">220 Ft</button>
+                    <button id="250-ft-button">250 Ft</button>
                 </div>
             </div>
             <div class="checklist-item">

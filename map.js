@@ -123,6 +123,7 @@ require([
     window.addEventListener('load', restoreMapPoint);
     
     document.getElementById('clear-all-button').addEventListener('click', clearMapData);
+    document.getElementById('clear-some-button').addEventListener('click', clearMapData);
 
     function saveFlight() {
         if (!selectedPoint) {
