@@ -153,7 +153,7 @@ document.querySelectorAll('.item-checkbox').forEach((checkbox) => {
 
             setTimeout(() => {
                 this.parentElement.classList.add('hidden');
-            }, 1000);
+            }, 300);
         }
     });
 });
